@@ -1,0 +1,19 @@
+{
+  "name": "09-chat",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "engines": {
+    "node": "10.16.0"
+  },
+  "dependencies": {
+    "ejs": "3.1.2",
+    "express": "4.17.1",
+    "mongoose": "5.9.13"
+  }
+}
