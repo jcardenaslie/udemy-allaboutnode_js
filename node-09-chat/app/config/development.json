@@ -1,4 +1,5 @@
 {
-	"host": "http://localhost:3000",
-	"dbURI": "mongodb+srv://jquin:cafetortugascott@cluster0-2vrms.mongodb.net/test"
+    "host": "http://localhost:3000",
+    "dbURI": "mongodb+srv://jquin:cafetortugascott@cluster0-2vrms.mongodb.net/test",
+    "sessionSecret": "catscanFly"
 }
