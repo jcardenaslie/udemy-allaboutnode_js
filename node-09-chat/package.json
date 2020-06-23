@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "server.js"
+    "start": "nodemon server.js",
+    "debug": "nodemon --inspect server.js"
   },
   "author": "",
   "license": "ISC",
@@ -16,6 +16,8 @@
     "ejs": "3.1.2",
     "express": "4.17.1",
     "express-session": "^1.17.1",
-    "mongoose": "5.9.13"
+    "mongoose": "5.9.13",
+    "passport": "^0.4.1",
+    "passport-facebook": "^3.0.0"
   }
 }

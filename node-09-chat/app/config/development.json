@@ -1,5 +1,12 @@
 {
     "host": "http://localhost:3000",
-    "dbURI": "mongodb+srv://jquin:cafetortugascott@cluster0-2vrms.mongodb.net/test",
-    "sessionSecret": "catscanFly"
+    "dbURI": "mongodb+srv://root:1234@cluster0-tghvh.mongodb.net/chatcat",
+    "sessionSecret": "catscanFly",
+    "fb": {
+        "clientID": "550565762326838",
+        "clientSecret": "f8a7c6628fdaadcd0e83b16628baf811",
+        "callbackURL": "https://82f3d15918a0.ngrok.io/auth/facebook/callback",
+        "enableProof": true,
+        "profileFields": ["id", "displayName", "photos"]
+    }
 }
