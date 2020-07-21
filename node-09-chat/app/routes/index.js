@@ -2,6 +2,7 @@
 
 const h = require('../helpers');
 const passport = require('passport');
+const config = require('../config');
 
 module.exports = () => {
     let routes = {
@@ -9,19 +10,27 @@ module.exports = () => {
             '/': (req, res, next) => {
                 res.render('login');
             },
-            '/rooms': (req, res, next) => {
+            '/rooms': [ h.isAuthenticated, (req, res, next) => {
                 res.render('rooms', {
-                    user : req.user
+                    user : req.user,
+                    host: config.host
                 } );
-            },
-            '/chat': (req, res, next) => {
-                res.render('chatroom');
-            },
+            }],
+            '/chat': [ h.isAuthenticated, (req, res, next) => {
+                res.render('chatroom', {
+                    user : req.user,
+                    host: config.host
+                });
+            }],
             '/auth/facebook': passport.authenticate('facebook'),
             '/auth/facebook/callback': passport.authenticate('facebook', {
                 successRedirect: '/rooms',
                 failureRedirect: '/'
-            })
+            }),
+            '/logout' : (req, res, next) => {
+                req.logout();
+                res.redirect('/');
+            }
         },
         'post': {
 

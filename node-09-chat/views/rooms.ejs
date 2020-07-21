@@ -5,6 +5,44 @@
 	<title>ChatCat - Rooms</title>
 	<link rel="stylesheet" href="/css/roomsStyles.css">
 	<script src="/js/jquery-2.1.4.min.js"></script>
+	<script src="/socket.io/socket.io.js"></script>
+
+	<script>
+		'use strict';
+
+		$( () => {
+			
+			let socket = io('<%= host %>'  + '/roomslist') // Esto no es una ruta, es un name space de socket.io
+			let newRoomInput = $("input[name='roomName']");
+
+			let renderChatRooms = chatrooms => {
+				let roomsListDiv = $('#roomsListUL');
+				let listStr = '';
+				for ( let cat of chatrooms){
+					listStr += `<a href="/chat/${cat.roomId}"><li>${cat.rooms}</li></a>`
+				}
+
+				console.log(listStr);
+				roomsListDiv.html('').append(listStr);
+			}
+
+			socket.on('connect', ()=> console.log("Connection to the server established"));
+
+			socket.emit('getChatrooms'); // Send back data to the front
+
+			socket.on('chatRoomsList', chatrooms => {
+				console.log('Chat rooms recieved');
+				renderChatRooms(JSON.parse(chatrooms));
+			});
+
+			$('#createBtn').on('click', () => {
+				if (newRoomInput.val() !== '') {
+					socket.emit ('createNewRoom', newRoomInput.val());
+					newRoomInput.val('');
+				}
+			})
+		})
+	</script>
 </head>
 <body>
 	<div class="container">
@@ -14,7 +52,7 @@
 		<div class="controls">
 			<div class="userPicHolder"><img  src=<%= user.profilePic%> alt="<%= user.fullName %>"></div>
 			<p class="userName"><%= user.fullName %></p>
-			<a href="login.htm" id="logOutBtn">Logout</a>
+			<a href="/logout" id="logOutBtn">Logout</a>
 		</div>
 		<div class="controls">
 			<input type="text" name="roomName" placeholder="Create a new Chatroom">

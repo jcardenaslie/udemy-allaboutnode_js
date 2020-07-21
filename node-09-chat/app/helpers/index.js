@@ -2,6 +2,7 @@
 
 const router = require('express').Router();
 const db = require('../db');
+const crypto = require('crypto');
 
 // traversea el objeto de rutas
 let _registerRoutes = (routes, method) => {
@@ -25,14 +26,12 @@ let _registerRoutes = (routes, method) => {
 }
 
 let findOne = profileId =>{
-	console.log("FindOne")
 	return db.userModel.findOne({
 		'profileId': profileId
 	});
 }
 
 let createUser = profile => {
-	console.log("Creating User ", profile)
 	return new Promise((resolve, reject) => {
 		let newChatUser = new db.userModel({
 			profileId: profile.id,
@@ -64,9 +63,36 @@ let route = routes => {
 	return router;
 }
 
+let isAuthenticated = (req, res, next) => {
+	if (req.isAuthenticated()){
+		next();
+	} else {
+		res.redirect('/');
+	}
+}
+
+let findRoomByName = (allrooms, room) => {
+	let findRoom = allrooms.findIndex( (element, index, array) => {
+		if (element.room === room) {
+			return true;
+		} else {
+			return false;
+		}
+	});
+
+	return findRoom > -1 ? true : false;
+}
+
+let randomHex = () => {
+	return crypto.randomBytes(24).toString('hex');
+}
+
 module.exports = {
 	route,
 	findOne, 
 	createUser,
-	findById
+	findById,
+	isAuthenticated,
+	findRoomByName,
+	randomHex
 }
