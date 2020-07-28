@@ -87,6 +87,51 @@ let randomHex = () => {
 	return crypto.randomBytes(24).toString('hex');
 }
 
+let findRoomById = (allRooms, roomId) => {
+	return allRooms.find( (element, index, array) => {
+		if (element.roomId == roomId){
+			return true;
+		} else {
+			return false;
+		}
+	}) 
+}
+
+let addUserToRoom = (allrooms, data, socket) => {
+	let getRoom = findRoomById(allrooms, data.roomId);
+	if (getRoom) {
+		console.log("socket ",socket.request.session);
+		// Get the active user's Id (ObjectId as used in session)
+		let userId = socket.request.session.passport.user; // Disponible por la incrustacion de passport con socketio en app
+		let checkUser = getRoom.users.findIndex( (element, index, array) => {
+			if (element.userId === userId){
+				return true;
+			} else {
+				return false;
+			}
+		}) 
+
+		// If the user is already present in the room, remove him first
+		if (checkUser){
+			getRoom.users.splice(checkUser, 1);
+		}
+
+		// Push the user into the room's users array
+		getRoom.users.push({
+			socketID: socket.id,
+			userId,
+			user: data.user,
+			userPic: data.userPic
+		});
+
+		//Join the room channel
+		socket.join(data.roomId);
+
+		// return Room object
+		return getRoom;
+	}
+}
+
 module.exports = {
 	route,
 	findOne, 
@@ -94,5 +139,7 @@ module.exports = {
 	findById,
 	isAuthenticated,
 	findRoomByName,
-	randomHex
+	randomHex,
+	findRoomById,
+	addUserToRoom
 }

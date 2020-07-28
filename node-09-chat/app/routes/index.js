@@ -11,16 +11,25 @@ module.exports = () => {
                 res.render('login');
             },
             '/rooms': [ h.isAuthenticated, (req, res, next) => {
+                // find a chatroom with thegiven id
+                // render it if the id is found
                 res.render('rooms', {
                     user : req.user,
                     host: config.host
-                } );
-            }],
-            '/chat': [ h.isAuthenticated, (req, res, next) => {
-                res.render('chatroom', {
-                    user : req.user,
-                    host: config.host
                 });
+            }],
+            '/chat/:id': [ h.isAuthenticated, (req, res, next) => {
+                let getRoom = h.findRoomById(req.app.locals.chatrooms, req.params.id);
+                if (getRoom === undefined){
+                    next();
+                } else {
+                    res.render('chatroom', {
+                        user : req.user,
+                        host: config.host,
+                        room: getRoom.room,
+                        roomId: getRoom.roomId
+                    } );
+                }
             }],
             '/auth/facebook': passport.authenticate('facebook'),
             '/auth/facebook/callback': passport.authenticate('facebook', {
